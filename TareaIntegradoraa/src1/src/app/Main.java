@@ -185,6 +185,156 @@ public class Main {
                         System.out.println("Médico registrado.");
 
                         break;
+                    case 2:
+
+                        System.out.print("Cédula: ");
+                        String cedulaAdmin = sc.nextLine();
+
+                        if (servicio.buscarPorCedula(cedulaAdmin) != null) {
+                            System.out.println("Cédula repetida.");
+                            break;
+                        }
+
+                        // NOMBRE
+                        String nombreAdmin;
+
+                        do {
+
+                            System.out.print("Nombre: ");
+                            nombreAdmin = sc.nextLine();
+
+                            if (!Validador.validarTexto(nombreAdmin)) {
+                                System.out.println("Nombre vacío.");
+                            }
+
+                        } while (!Validador.validarTexto(nombreAdmin));
+
+                        // EDAD
+                        int edadAdmin;
+
+                        do {
+
+                            try {
+
+                                System.out.print("Edad: ");
+                                edadAdmin = Integer.parseInt(sc.nextLine());
+
+                                if (!Validador.validarEdad(edadAdmin)) {
+                                    System.out.println("Edad inválida.");
+                                }
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println("Debe ingresar números.");
+                                edadAdmin = -1;
+                            }
+
+                        } while (!Validador.validarEdad(edadAdmin));
+
+                        // TELÉFONO
+                        String telefonoAdmin;
+
+                        do {
+
+                            System.out.print("Teléfono: ");
+                            telefonoAdmin = sc.nextLine();
+
+                            if (!Validador.validarTelefono(telefonoAdmin)) {
+                                System.out.println("Solo números.");
+                            }
+
+                        } while (!Validador.validarTelefono(telefonoAdmin));
+
+                        // CORREO
+                        String correoAdmin;
+
+                        do {
+
+                            System.out.print("Correo: ");
+                            correoAdmin = sc.nextLine();
+
+                            if (!Validador.validarCorreo(correoAdmin)) {
+                                System.out.println("Correo inválido.");
+                            }
+
+                        } while (!Validador.validarCorreo(correoAdmin));
+
+                        // DEPARTAMENTO
+                        String departamento;
+
+                        do {
+
+                            System.out.print("Departamento: ");
+                            departamento = sc.nextLine();
+
+                            if (!Validador.validarTexto(departamento)) {
+                                System.out.println("Departamento vacío.");
+                            }
+
+                        } while (!Validador.validarTexto(departamento));
+
+                        // HORAS
+                        int horasTrabajadas;
+
+                        do {
+
+                            try {
+
+                                System.out.print("Horas trabajadas: ");
+                                horasTrabajadas =
+                                        Integer.parseInt(sc.nextLine());
+
+                                if (horasTrabajadas <= 0) {
+                                    System.out.println("Debe ser mayor a cero.");
+                                }
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println("Ingrese números válidos.");
+                                horasTrabajadas = -1;
+                            }
+
+                        } while (horasTrabajadas <= 0);
+
+                        // VALOR HORA
+                        double valorHora;
+
+                        do {
+
+                            try {
+
+                                System.out.print("Valor por hora: ");
+                                valorHora =
+                                        Double.parseDouble(sc.nextLine());
+
+                                if (valorHora <= 0) {
+                                    System.out.println("Debe ser mayor a cero.");
+                                }
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println("Ingrese valores válidos.");
+                                valorHora = -1;
+                            }
+
+                        } while (valorHora <= 0);
+
+                        Administrativo admin = new Administrativo(
+                                cedulaAdmin,
+                                nombreAdmin,
+                                edadAdmin,
+                                telefonoAdmin,
+                                correoAdmin,
+                                departamento,
+                                horasTrabajadas,
+                                valorHora
+                        );
+
+                        servicio.agregarEmpleado(admin);
+
+                        System.out.println("Administrativo registrado.");
+
+                        break;
 
                     case 3:
 
