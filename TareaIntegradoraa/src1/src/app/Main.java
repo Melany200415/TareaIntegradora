@@ -1,17 +1,350 @@
 package app;
+import Modelo.Empleado;
+import Modelo.Medico;
+import Modelo.Administrativo;
+import Servicio.EmpleadoServicio;
+import Util.Validador;
+import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        EmpleadoServicio servicio = new EmpleadoServicio();
+
+        int opcion = 0;
+
+        do {
+
+            try {
+
+                System.out.println("\n===== CLÍNICA SALUD TOTAL =====");
+                System.out.println("1. Registrar médico");
+                System.out.println("2. Registrar administrativo");
+                System.out.println("3. Mostrar empleados");
+                System.out.println("4. Buscar por cédula");
+                System.out.println("5. Reemplazar información");
+                System.out.println("6. Eliminar registro");
+                System.out.println("7. Calcular pagos");
+                System.out.println("8. Mostrar estadísticas");
+                System.out.println("9. Salir");
+
+                System.out.print("Ingrese opción: ");
+
+                opcion = Integer.parseInt(sc.nextLine());
+
+                switch (opcion) {
+
+                    case 1:
+
+                        System.out.print("Cédula: ");
+                        String cedula = sc.nextLine();
+
+                        if (servicio.buscarPorCedula(cedula) != null) {
+                            System.out.println("Cédula repetida.");
+                            break;
+                        }
+
+                        // NOMBRE
+                        String nombre;
+
+                        do {
+
+                            System.out.print("Nombre: ");
+                            nombre = sc.nextLine();
+
+                            if (!Validador.validarTexto(nombre)) {
+                                System.out.println("Error: nombre vacío.");
+                            }
+
+                        } while (!Validador.validarTexto(nombre));
+
+                        // EDAD
+                        int edad;
+
+                        do {
+
+                            try {
+
+                                System.out.print("Edad: ");
+                                edad = Integer.parseInt(sc.nextLine());
+
+                                if (!Validador.validarEdad(edad)) {
+                                    System.out.println("Edad inválida.");
+                                }
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println("Debe ingresar números.");
+                                edad = -1;
+                            }
+
+                        } while (!Validador.validarEdad(edad));
+
+                        // TELÉFONO
+                        String telefono;
+
+                        do {
+
+                            System.out.print("Teléfono: ");
+                            telefono = sc.nextLine();
+
+                            if (!Validador.validarTelefono(telefono)) {
+                                System.out.println("Error: solo números.");
+                            }
+
+                        } while (!Validador.validarTelefono(telefono));
+
+                        // CORREO
+                        String correo;
+
+                        do {
+
+                            System.out.print("Correo: ");
+                            correo = sc.nextLine();
+
+                            if (!Validador.validarCorreo(correo)) {
+                                System.out.println("Correo inválido.");
+                            }
+
+                        } while (!Validador.validarCorreo(correo));
+
+                        // ESPECIALIDAD
+                        String especialidad;
+
+                        do {
+
+                            System.out.print("Especialidad: ");
+                            especialidad = sc.nextLine();
+
+                            if (!Validador.validarTexto(especialidad)) {
+                                System.out.println("Especialidad vacía.");
+                            }
+
+                        } while (!Validador.validarTexto(especialidad));
+
+                        // PACIENTES
+                        int pacientes;
+
+                        do {
+
+                            try {
+
+                                System.out.print("Pacientes atendidos: ");
+                                pacientes = Integer.parseInt(sc.nextLine());
+
+                                if (pacientes <= 0) {
+                                    System.out.println("Debe ser mayor a cero.");
+                                }
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println("Ingrese números válidos.");
+                                pacientes = -1;
+                            }
+
+                        } while (pacientes <= 0);
+
+                        // VALOR CONSULTA
+                        double valorConsulta;
+
+                        do {
+
+                            try {
+
+                                System.out.print("Valor consulta: ");
+                                valorConsulta = Double.parseDouble(sc.nextLine());
+
+                                if (valorConsulta <= 0) {
+                                    System.out.println("Debe ser mayor a cero.");
+                                }
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println("Ingrese valores válidos.");
+                                valorConsulta = -1;
+                            }
+
+                        } while (valorConsulta <= 0);
+
+                        Medico medico = new Medico(
+                                cedula,
+                                nombre,
+                                edad,
+                                telefono,
+                                correo,
+                                especialidad,
+                                pacientes,
+                                valorConsulta
+                        );
+
+                        servicio.agregarEmpleado(medico);
+
+                        System.out.println("Médico registrado.");
+
+                        break;
+
+                    case 3:
+
+                        servicio.mostrarEmpleados();
+                        break;
+
+                    case 4:
+
+                        System.out.print("Ingrese cédula: ");
+                        String buscar = sc.nextLine();
+
+                        Empleado encontrado =
+                                servicio.buscarPorCedula(buscar);
+
+                        if (encontrado != null) {
+                            encontrado.mostrarInformacion();
+                        } else {
+                            System.out.println("Registro no encontrado.");
+                        }
+
+                        break;
+                    case 5:
+
+                        System.out.print("Ingrese cédula a reemplazar: ");
+                        String cedulaReemplazar = sc.nextLine();
+
+                        Empleado encontradoReemplazo =
+                                servicio.buscarPorCedula(cedulaReemplazar);
+
+                        if (encontradoReemplazo == null) {
+
+                            System.out.println("Empleado no encontrado.");
+                            break;
+                        }
+
+                        System.out.print("Nuevo nombre: ");
+                        String nuevoNombre = sc.nextLine();
+
+                        System.out.print("Nueva edad: ");
+                        int nuevaEdad = Integer.parseInt(sc.nextLine());
+
+                        System.out.print("Nuevo teléfono: ");
+                        String nuevoTelefono = sc.nextLine();
+
+                        System.out.print("Nuevo correo: ");
+                        String nuevoCorreo = sc.nextLine();
+
+                        if (encontradoReemplazo instanceof Medico) {
+
+                            System.out.print("Nueva especialidad: ");
+                            String nuevaEspecialidad = sc.nextLine();
+
+                            System.out.print("Pacientes atendidos: ");
+                            int nuevosPacientes =
+                                    Integer.parseInt(sc.nextLine());
+
+                            System.out.print("Valor consulta: ");
+                            double nuevoValorConsulta =
+                                    Double.parseDouble(sc.nextLine());
+
+                            Medico nuevoMedico = new Medico(
+                                    cedulaReemplazar,
+                                    nuevoNombre,
+                                    nuevaEdad,
+                                    nuevoTelefono,
+                                    nuevoCorreo,
+                                    nuevaEspecialidad,
+                                    nuevosPacientes,
+                                    nuevoValorConsulta
+                            );
+
+                            servicio.reemplazarEmpleado(
+                                    cedulaReemplazar,
+                                    nuevoMedico
+                            );
+
+                        } else if (encontradoReemplazo instanceof Administrativo) {
+
+                            System.out.print("Nuevo departamento: ");
+                            String nuevoDepartamento = sc.nextLine();
+
+                            System.out.print("Horas trabajadas: ");
+                            int nuevasHoras =
+                                    Integer.parseInt(sc.nextLine());
+
+                            System.out.print("Valor hora: ");
+                            double nuevoValorHora =
+                                    Double.parseDouble(sc.nextLine());
+
+                            Administrativo nuevoAdmin = new Administrativo(
+                                    cedulaReemplazar,
+                                    nuevoNombre,
+                                    nuevaEdad,
+                                    nuevoTelefono,
+                                    nuevoCorreo,
+                                    nuevoDepartamento,
+                                    nuevasHoras,
+                                    nuevoValorHora
+                            );
+
+                            servicio.reemplazarEmpleado(
+                                    cedulaReemplazar,
+                                    nuevoAdmin
+                            );
+                        }
+
+                        System.out.println("Información reemplazada.");
+
+                        break;
+                    case 6:
+
+                        System.out.print("Ingrese cédula a eliminar: ");
+                        String cedulaEliminar = sc.nextLine();
+
+                        boolean eliminado =
+                                servicio.eliminarEmpleado(cedulaEliminar);
+
+                        if (eliminado) {
+
+                            System.out.println("Empleado eliminado.");
+
+                        } else {
+
+                            System.out.println("Empleado no encontrado.");
+                        }
+
+                        break;
+                    case 7:
+
+                        System.out.println("===== PAGOS =====");
+
+                        servicio.mostrarEmpleados();
+
+                        break;
+                    case 8:
+
+                        servicio.mostrarEstadisticas();
+                        break;
+
+                    case 9:
+
+                        System.out.println("Saliendo...");
+                        break;
+
+                    default:
+
+                        System.out.println("Error: opción inválida.");
+                }
+
+            } catch (NumberFormatException e) {
+
+                System.out.println("Error: opción inválida.");
+
+            } catch (Exception e) {
+
+                System.out.println("Error: " + e.getMessage());
+            }
+
+        } while (opcion != 9);
+
+        sc.close();
     }
 }
